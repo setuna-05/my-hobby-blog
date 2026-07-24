@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const categories = ['gadget', 'reading', 'outdoor'];
+  return categories.map((category) => ({
+    params: { category },
+  }));
+}
+
+const { category } = Astro.params;
+const allPosts = await getCollection('blog');
+const posts = allPosts.filter((post) => post.data.category === category);
+---
+
+<Layout title={`カテゴリ: ${category}`}>
+  <h1>{category} の記事一覧</h1>
+  <ul>
+    {posts.map((post) => (
+      <li><a href={`/blog/${post.id}/`}>{post.data.title}</a></li>
+    ))}
+  </ul>
+</Layout>

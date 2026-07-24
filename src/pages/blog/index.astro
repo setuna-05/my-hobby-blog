@@ -1,0 +1,165 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// カテゴリの日本語表示名を定義(必要に応じて増やせます)
+const categoryLabels: Record<string, string> = {
+  gadget: 'ガジェット',
+  reading: '読書',
+  outdoor: 'アウトドア',
+};
+
+// 全記事を取得し、公開日順に並び替え
+const allPosts = await getCollection('blog');
+allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// カテゴリごとに記事をグループ分け
+const categories = ['gadget', 'reading', 'outdoor'] as const;
+const postsByCategory = categories.map((category) => ({
+  category,
+  label: categoryLabels[category],
+  posts: allPosts.filter((post) => post.data.category === category),
+}));
+---
+
+<Layout title="ブログ一覧">
+  <h1>ブログ</h1>
+
+  <!-- カテゴリナビゲーション -->
+  <nav class="category-nav">
+    {postsByCategory.map(({ category, label, posts }) => (
+     <a href={`/blog/${category}/`} class={`category-badge ${category}`}>
+  {label} ({posts.length})
+</a>
+    ))}
+  </nav>
+
+  <!-- カテゴリごとに記事を表示 -->
+  {postsByCategory.map(({ category, label, posts }) => (
+    <section class={`category-section ${category}`}>
+      <h2>
+        <a href={`/blog/${category}/`}>{label}</a>
+      </h2>
+
+      {posts.length === 0 ? (
+        <p class="no-posts">まだ記事がありません</p>
+      ) : (
+        <ul class="post-list">
+          {posts.map((post) => (
+            <li>
+              <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+              <span class="date">
+                {post.data.pubDate.toLocaleDateString('ja-JP')}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  ))}
+</Layout>
+
+<style>
+  h1 {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 2.5rem;
+  }
+
+  .category-nav {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .category-badge {
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .category-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  /* カテゴリごとの色分け */
+  .category-badge.gadget {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+  .category-badge.reading {
+    background: #dcfce7;
+    color: #15803d;
+  }
+  .category-badge.outdoor {
+    background: #ffedd5;
+    color: #c2410c;
+  }
+
+  .category-section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+    background: #fafafa;
+  }
+
+  .category-section h2 {
+    display: inline-block;
+    padding-bottom: 0.3rem;
+    border-bottom: 3px solid;
+  }
+
+  .category-section.gadget h2 { border-color: #3b82f6; }
+  .category-section.reading h2 { border-color: #22c55e; }
+  .category-section.outdoor h2 { border-color: #f97316; }
+
+  .category-section h2 a {
+    text-decoration: none;
+    color: #1f2937;
+  }
+
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+  }
+
+  .post-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.5rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: transform 0.15s ease;
+  }
+
+  .post-list li:hover {
+    transform: translateX(4px);
+  }
+
+  .post-list a {
+    text-decoration: none;
+    color: #111827;
+    font-weight: 500;
+  }
+
+  .date {
+    color: #9ca3af;
+    font-size: 0.85rem;
+  }
+
+  .no-posts {
+    color: #9ca3af;
+    font-style: italic;
+  }
+</style>
