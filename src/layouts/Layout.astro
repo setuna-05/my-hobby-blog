@@ -96,19 +96,21 @@ const { title, description = '' } = Astro.props;
 		padding: 1rem 1rem;
 	}
 
-.moon-deco {
-	/* 既存のスタイルはそのまま */
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	user-select: none;
-}
+	.moon-deco {
+		top: 85px;
+		right: 20px;
+		font-size: 2rem;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		user-select: none;
+	}
 
 	.moon-deco.moon-moved {
 		right: calc(100% - 60px);
 	}
 
 	.moon-menu {
-		top: 115px;
+		top: 130px;
 		right: 20px;
 		padding: 0.6rem;
 	}
