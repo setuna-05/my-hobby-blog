@@ -10,7 +10,9 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.params;
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blog', ({ data }) => {
+  return data.draft !== true;
+});
 const posts = allPosts.filter((post) => post.data.category === category);
 ---
 

@@ -10,7 +10,10 @@ const categoryLabels: Record<string, string> = {
 };
 
 // 全記事を取得し、公開日順に並び替え
-const allPosts = await getCollection('blog');
+// 全記事を取得(下書きは除外)し、公開日順に並び替え
+const allPosts = await getCollection('blog', ({ data }) => {
+  return data.draft !== true;
+});
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 // カテゴリごとに記事をグループ分け

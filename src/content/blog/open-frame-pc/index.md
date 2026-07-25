@@ -3,6 +3,7 @@ title: 'オープンフレームでPCを組みました'
 description: 'オープンフレームでPCを組みました'
 pubDate: 2026-07-24
 category: "gadget"
+draft: true
 ---
 
 どうも、雪梛というものです<br>
