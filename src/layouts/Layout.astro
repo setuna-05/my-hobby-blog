@@ -84,7 +84,7 @@ const { title, description = '' } = Astro.props;
 		padding: 1rem 1rem;
 	}
 
-	.moon-deco {
+.moon-deco {
 	position: fixed;
 	top: 90px;
 	right: 60px;
@@ -92,8 +92,7 @@ const { title, description = '' } = Astro.props;
 	opacity: 0.85;
 	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
 	cursor: pointer;
-	z-index: 0;
-	touch-action: none;  /* ← これを追加 */
+	z-index: 10;  /* ← 0 から変更 */
 	transition: right 0.7s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.3s ease, transform 0.3s ease;
 }
 
@@ -102,10 +101,22 @@ const { title, description = '' } = Astro.props;
 	}
 
 	.moon-menu {
-		top: 130px;
-		right: 20px;
-		padding: 0.6rem;
-	}
+	position: fixed;
+	top: 150px;
+	right: 60px;
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	background: var(--color-surface);
+	border-radius: 16px;
+	padding: 0.8rem;
+	box-shadow: var(--shadow-soft);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-8px);
+	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+	z-index: 11;  /* ← 1 から変更(月より少し高く) */
+}
 
 	.moon-deco.moon-moved ~ .moon-menu {
 		right: calc(100% - 60px);
