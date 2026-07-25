@@ -84,6 +84,7 @@ const { title, description = '' } = Astro.props;
 		padding: 1rem 1rem;
 	}
 
+/* 月・月メニュー(共通の基本スタイル) */
 .moon-deco {
 	position: fixed;
 	top: 90px;
@@ -92,15 +93,24 @@ const { title, description = '' } = Astro.props;
 	opacity: 0.85;
 	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
 	cursor: pointer;
-	z-index: 10;  /* ← 0 から変更 */
+	z-index: 9999;
 	transition: right 0.7s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.3s ease, transform 0.3s ease;
 }
 
-	.moon-deco.moon-moved {
-		right: calc(100% - 60px);
-	}
+.moon-deco::before {
+	content: '🌙';
+}
 
-	.moon-menu {
+.moon-deco:hover {
+	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 10px rgba(232, 185, 138, 0.7));
+	transform: scale(1.1);
+}
+
+.moon-deco.moon-moved {
+	right: calc(100% - 140px);
+}
+
+.moon-menu {
 	position: fixed;
 	top: 150px;
 	right: 60px;
@@ -115,11 +125,60 @@ const { title, description = '' } = Astro.props;
 	visibility: hidden;
 	transform: translateY(-8px);
 	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-	z-index: 11;  /* ← 1 から変更(月より少し高く) */
+	z-index: 9999;
 }
 
+.moon-menu a {
+	color: var(--color-text);
+	text-decoration: none;
+	font-size: 0.9rem;
+	font-weight: 600;
+	padding: 0.4rem 0.8rem;
+	border-radius: 10px;
+	transition: color 0.2s ease, text-shadow 0.2s ease;
+	white-space: nowrap;
+}
+
+.moon-menu a:hover {
+	color: #e8b98a;
+	text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
+}
+
+.moon-menu.moon-menu-open {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.moon-deco.moon-moved ~ .moon-menu {
+	right: calc(100% - 140px);
+}
+
+/* スマホ用の上書き(位置とサイズのみ、z-indexはここでは指定しない) */
+@media (max-width: 768px) {
+	main {
+		padding: 1rem 1rem;
+	}
+
+	.moon-deco {
+		top: 85px;
+		right: 20px;
+		font-size: 2rem;
+		touch-action: none;
+	}
+
+	.moon-deco.moon-moved {
+		right: calc(100% - 55px);
+	}
+
+	.moon-menu {
+		top: 130px;
+		right: 20px;
+		padding: 0.6rem;
+	}
+
 	.moon-deco.moon-moved ~ .moon-menu {
-		right: calc(100% - 60px);
+		right: calc(100% - 55px);
 	}
 }
 
