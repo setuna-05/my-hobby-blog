@@ -41,8 +41,9 @@ const { title, description = '' } = Astro.props;
 	const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
 	if (isMobile) {
-		// スマホ:タップでメニューの開閉のみ
-		moon?.addEventListener('click', (e) => {
+		// スマホ:タップでメニューの開閉のみ(touchendで直接検知)
+		moon?.addEventListener('touchend', (e) => {
+			e.preventDefault();
 			e.stopPropagation();
 			moonMenu?.classList.toggle('moon-menu-open');
 		});
