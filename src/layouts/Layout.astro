@@ -36,47 +36,36 @@ const { title, description = '' } = Astro.props;
 </body>
 
 <script>
-	const moon = document.getElementById('moon');
-	const moonMenu = document.getElementById('moonMenu');
+let pressTimer: ReturnType<typeof setTimeout> | null = null;
+let touchMoved = false;
+let startX = 0;
+let startY = 0;
 
-	let pressTimer: ReturnType<typeof setTimeout> | null = null;
-	let touchMoved = false;
+moon?.addEventListener('touchstart', (e) => {
+	touchMoved = false;
+	const touch = e.touches[0];
+	startX = touch.clientX;
+	startY = touch.clientY;
+	pressTimer = setTimeout(() => {
+		if (!touchMoved) {
+			moonMenu?.classList.add('moon-menu-open');
+		}
+	}, 500);
+});
 
-	moon?.addEventListener('click', () => {
-		moon.classList.toggle('moon-moved');
-		moonMenu?.classList.remove('moon-menu-open');
-	});
-
-	// PC向け:右クリックでメニュー表示
-	moon?.addEventListener('contextmenu', (e) => {
-		e.preventDefault();
-		moonMenu?.classList.toggle('moon-menu-open');
-	});
-
-	// スマホ向け:独自の長押し検知
-	moon?.addEventListener('touchstart', () => {
-		touchMoved = false;
-		pressTimer = setTimeout(() => {
-			if (!touchMoved) {
-				moonMenu?.classList.add('moon-menu-open');
-			}
-		}, 500);
-	});
-
-	moon?.addEventListener('touchmove', () => {
+moon?.addEventListener('touchmove', (e) => {
+	const touch = e.touches[0];
+	const dx = Math.abs(touch.clientX - startX);
+	const dy = Math.abs(touch.clientY - startY);
+	if (dx > 10 || dy > 10) {
 		touchMoved = true;
 		if (pressTimer) clearTimeout(pressTimer);
-	});
+	}
+});
 
-	moon?.addEventListener('touchend', () => {
-		if (pressTimer) clearTimeout(pressTimer);
-	});
-
-	document.addEventListener('click', (e) => {
-		if (e.target !== moon) {
-			moonMenu?.classList.remove('moon-menu-open');
-		}
-	});
+moon?.addEventListener('touchend', () => {
+	if (pressTimer) clearTimeout(pressTimer);
+});
 </script>
 </html>
 
@@ -97,13 +86,17 @@ const { title, description = '' } = Astro.props;
 	}
 
 	.moon-deco {
-		top: 85px;
-		right: 20px;
-		font-size: 2rem;
-		-webkit-touch-callout: none;
-		-webkit-user-select: none;
-		user-select: none;
-	}
+	position: fixed;
+	top: 90px;
+	right: 60px;
+	font-size: 2.5rem;
+	opacity: 0.85;
+	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+	cursor: pointer;
+	z-index: 0;
+	touch-action: none;  /* ← これを追加 */
+	transition: right 0.7s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.3s ease, transform 0.3s ease;
+}
 
 	.moon-deco.moon-moved {
 		right: calc(100% - 60px);
