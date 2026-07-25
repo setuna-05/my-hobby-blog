@@ -68,6 +68,32 @@ const { title, description = '' } = Astro.props;
 	--shadow-soft: 0 4px 16px rgba(255, 143, 171, 0.15);
 }
 
+@media (max-width: 768px) {
+	main {
+		padding: 1rem 1rem;
+	}
+
+	.moon-deco {
+		top: 70px;
+		right: 20px;
+		font-size: 1.8rem;
+	}
+
+	.moon-deco.moon-moved {
+		right: calc(100% - 60px);
+	}
+
+	.moon-menu {
+		top: 115px;
+		right: 20px;
+		padding: 0.6rem;
+	}
+
+	.moon-deco.moon-moved ~ .moon-menu {
+		right: calc(100% - 60px);
+	}
+}
+
 body {
 	background-color: var(--color-bg);
 	background-image:
