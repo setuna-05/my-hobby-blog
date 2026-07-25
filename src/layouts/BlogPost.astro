@@ -54,16 +54,28 @@ const { title, description, pubDate, updatedDate, heroImage, category } = Astro.
 			}
 
 			@media (max-width: 768px) {
-	.prose {
-		padding: 0.5em;
+	main {
+		padding: 1rem 1rem;
 	}
 
-	.title h1 {
-		font-size: 1.8rem;
+	.moon-deco {
+		top: 130px;
+		right: 20px;
+		font-size: 1.6rem;
 	}
 
-	.hero-image img {
-		border-radius: 8px;
+	.moon-deco.moon-moved {
+		right: calc(100% - 50px);
+	}
+
+	.moon-menu {
+		top: 175px;
+		right: 20px;
+		padding: 0.6rem;
+	}
+
+	.moon-deco.moon-moved ~ .moon-menu {
+		right: calc(100% - 50px);
 	}
 }
 		</style>
