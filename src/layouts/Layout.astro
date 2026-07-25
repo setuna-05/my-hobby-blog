@@ -45,6 +45,7 @@ const { title, description = '' } = Astro.props;
 		moon?.addEventListener('touchend', (e) => {
 			e.preventDefault();
 			e.stopPropagation();
+			alert('タップを検知しました'); 
 			moonMenu?.classList.toggle('moon-menu-open');
 		});
 	} else {
