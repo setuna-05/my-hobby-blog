@@ -45,7 +45,6 @@ const { title, description = '' } = Astro.props;
 		moon?.addEventListener('touchend', (e) => {
 			e.preventDefault();
 			e.stopPropagation();
-			alert('タップを検知しました'); 
 			moonMenu?.classList.toggle('moon-menu-open');
 		});
 	} else {
@@ -71,209 +70,106 @@ const { title, description = '' } = Astro.props;
 
 <style is:global>
 	:root {
-	--color-bg: #2a2233;
-	--color-surface: #3a3042;
-	--color-accent: #ff8fab;
-	--color-accent-soft: #4a3f52;
-	--color-text: #b8ada3;
-	--color-text-muted: #9a8d81;
-	--shadow-soft: 0 4px 16px rgba(255, 143, 171, 0.15);
-}
-
-@media (max-width: 768px) {
-	main {
-		padding: 1rem 1rem;
+		--color-bg: #2a2233;
+		--color-surface: #3a3042;
+		--color-accent: #ff8fab;
+		--color-accent-soft: #4a3f52;
+		--color-text: #b8ada3;
+		--color-text-muted: #9a8d81;
+		--shadow-soft: 0 4px 16px rgba(255, 143, 171, 0.15);
 	}
 
-/* 月・月メニュー(共通の基本スタイル) */
-.moon-deco {
-	position: fixed;
-	top: 90px;
-	right: 60px;
-	font-size: 2.5rem;
-	opacity: 0.85;
-	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-	cursor: pointer;
-	z-index: 9999;
-	transition: right 0.7s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.3s ease, transform 0.3s ease;
-}
-
-.moon-deco::before {
-	content: '🌙';
-}
-
-.moon-deco:hover {
-	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 10px rgba(232, 185, 138, 0.7));
-	transform: scale(1.1);
-}
-
-.moon-deco.moon-moved {
-	right: calc(100% - 140px);
-}
-
-.moon-menu {
-	position: fixed;
-	top: 150px;
-	right: 60px;
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-	background: var(--color-surface);
-	border-radius: 16px;
-	padding: 0.8rem;
-	box-shadow: var(--shadow-soft);
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(-8px);
-	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-	z-index: 9999;
-}
-
-.moon-menu a {
-	color: var(--color-text);
-	text-decoration: none;
-	font-size: 0.9rem;
-	font-weight: 600;
-	padding: 0.4rem 0.8rem;
-	border-radius: 10px;
-	transition: color 0.2s ease, text-shadow 0.2s ease;
-	white-space: nowrap;
-}
-
-.moon-menu a:hover {
-	color: #e8b98a;
-	text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
-}
-
-.moon-menu.moon-menu-open {
-	opacity: 1;
-	visibility: visible;
-	transform: translateY(0);
-}
-
-.moon-deco.moon-moved ~ .moon-menu {
-	right: calc(100% - 140px);
-}
-
-/* スマホ用の上書き(位置とサイズのみ、z-indexはここでは指定しない) */
-@media (max-width: 768px) {
-	main {
-		padding: 1rem 1rem;
+	body {
+		background-color: var(--color-bg);
+		background-image:
+			radial-gradient(3.5px 3.5px at 20px 30px, rgba(255,255,255,0.6), transparent),
+			radial-gradient(3.5px 3.5px at 140px 80px, rgba(255,255,255,0.5), transparent),
+			radial-gradient(3px 3px at 90px 150px, rgba(255,255,255,0.7), transparent),
+			radial-gradient(3.5px 3.5px at 250px 60px, rgba(255,255,255,0.4), transparent),
+			radial-gradient(2.5px 2.5px at 320px 200px, rgba(255,255,255,0.6), transparent),
+			radial-gradient(3px 3px at 60px 250px, rgba(255,255,255,0.5), transparent),
+			radial-gradient(3.5px 3.5px at 380px 120px, rgba(255,255,255,0.5), transparent),
+			radial-gradient(2.5px 2.5px at 200px 300px, rgba(255,255,255,0.6), transparent),
+			radial-gradient(3px 3px at 45px 100px, rgba(255,255,255,0.5), transparent),
+			radial-gradient(2.5px 2.5px at 170px 220px, rgba(255,255,255,0.6), transparent),
+			radial-gradient(3px 3px at 300px 30px, rgba(255,255,255,0.5), transparent),
+			radial-gradient(2.5px 2.5px at 350px 280px, rgba(255,255,255,0.55), transparent);
+		background-repeat: repeat;
+		background-size: 400px 400px;
+		color: var(--color-text);
+		font-family: 'Zen Maru Gothic', sans-serif;
+		margin: 0;
+		position: relative;
 	}
 
 	.moon-deco {
-		top: 85px;
-		right: 20px;
-		font-size: 2rem;
-		touch-action: none;
+		position: fixed;
+		top: 90px;
+		right: 60px;
+		font-size: 2.5rem;
+		opacity: 0.85;
+		filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+		cursor: pointer;
+		z-index: 9999;
+		transition: right 0.7s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.3s ease, transform 0.3s ease;
+	}
+
+	.moon-deco::before {
+		content: '🌙';
+	}
+
+	.moon-deco:hover {
+		filter: grayscale(1) brightness(1.6) drop-shadow(0 0 10px rgba(232, 185, 138, 0.7));
+		transform: scale(1.1);
 	}
 
 	.moon-deco.moon-moved {
-		right: calc(100% - 55px);
+		right: calc(100% - 140px);
 	}
 
 	.moon-menu {
-		top: 130px;
-		right: 20px;
-		padding: 0.6rem;
+		position: fixed;
+		top: 150px;
+		right: 60px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		background: var(--color-surface);
+		border-radius: 16px;
+		padding: 0.8rem;
+		box-shadow: var(--shadow-soft);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-8px);
+		transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+		z-index: 9999;
+	}
+
+	.moon-menu a {
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 0.9rem;
+		font-weight: 600;
+		padding: 0.4rem 0.8rem;
+		border-radius: 10px;
+		transition: color 0.2s ease, text-shadow 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.moon-menu a:hover {
+		color: #e8b98a;
+		text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
+	}
+
+	.moon-menu.moon-menu-open {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
 	}
 
 	.moon-deco.moon-moved ~ .moon-menu {
-		right: calc(100% - 55px);
+		right: calc(100% - 140px);
 	}
-}
-
-body {
-	background-color: var(--color-bg);
-	background-image:
-		radial-gradient(3.5px 3.5px at 20px 30px, rgba(255,255,255,0.6), transparent),
-		radial-gradient(3.5px 3.5px at 140px 80px, rgba(255,255,255,0.5), transparent),
-		radial-gradient(3px 3px at 90px 150px, rgba(255,255,255,0.7), transparent),
-		radial-gradient(3.5px 3.5px at 250px 60px, rgba(255,255,255,0.4), transparent),
-		radial-gradient(2.5px 2.5px at 320px 200px, rgba(255,255,255,0.6), transparent),
-		radial-gradient(3px 3px at 60px 250px, rgba(255,255,255,0.5), transparent),
-		radial-gradient(3.5px 3.5px at 380px 120px, rgba(255,255,255,0.5), transparent),
-		radial-gradient(2.5px 2.5px at 200px 300px, rgba(255,255,255,0.6), transparent),
-		radial-gradient(3px 3px at 45px 100px, rgba(255,255,255,0.5), transparent),
-		radial-gradient(2.5px 2.5px at 170px 220px, rgba(255,255,255,0.6), transparent),
-		radial-gradient(3px 3px at 300px 30px, rgba(255,255,255,0.5), transparent),
-		radial-gradient(2.5px 2.5px at 350px 280px, rgba(255,255,255,0.55), transparent);
-	background-repeat: repeat;
-	background-size: 400px 400px;
-	color: var(--color-text);
-	font-family: 'Zen Maru Gothic', sans-serif;
-	margin: 0;
-	position: relative;
-}
-
-.moon-deco {
-	position: fixed;
-	top: 90px;
-	right: 60px;
-	font-size: 2.5rem;
-	opacity: 0.85;
-	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-	cursor: pointer;
-	z-index: 0;
-	transition: right 0.7s cubic-bezier(0.34, 1.2, 0.64, 1), filter 0.3s ease, transform 0.3s ease;
-}
-
-.moon-deco::before {
-	content: '🌙';
-}
-
-.moon-deco:hover {
-	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 10px rgba(232, 185, 138, 0.7));
-	transform: scale(1.1);
-}
-
-.moon-deco.moon-moved {
-	right: calc(100% - 140px);
-}
-
-.moon-menu {
-	position: fixed;
-	top: 150px;
-	right: 60px;
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-	background: var(--color-surface);
-	border-radius: 16px;
-	padding: 0.8rem;
-	box-shadow: var(--shadow-soft);
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(-8px);
-	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-	z-index: 1;
-}
-
-.moon-menu a {
-	color: var(--color-text);
-	text-decoration: none;
-	font-size: 0.9rem;
-	font-weight: 600;
-	padding: 0.4rem 0.8rem;
-	border-radius: 10px;
-	transition: color 0.2s ease, text-shadow 0.2s ease;
-	white-space: nowrap;
-}
-
-.moon-menu a:hover {
-	color: #e8b98a;
-	text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
-}
-
-.moon-menu.moon-menu-open {
-	opacity: 1;
-	visibility: visible;
-	transform: translateY(0);
-}
-
-.moon-deco.moon-moved ~ .moon-menu {
-	right: calc(100% - 140px);
-}
 
 	main {
 		max-width: 800px;
@@ -283,5 +179,32 @@ body {
 
 	a {
 		color: var(--color-text);
+	}
+
+	@media (max-width: 768px) {
+		main {
+			padding: 1rem 1rem;
+		}
+
+		.moon-deco {
+			top: 85px;
+			right: 20px;
+			font-size: 2rem;
+			touch-action: none;
+		}
+
+		.moon-deco.moon-moved {
+			right: calc(100% - 55px);
+		}
+
+		.moon-menu {
+			top: 130px;
+			right: 20px;
+			padding: 0.6rem;
+		}
+
+		.moon-deco.moon-moved ~ .moon-menu {
+			right: calc(100% - 55px);
+		}
 	}
 </style>
