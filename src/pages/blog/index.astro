@@ -21,6 +21,12 @@ const postsByCategory = categories.map((category) => ({
   posts: allPosts.filter((post) => post.data.category === category),
 }));
 ---
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="wobbly">
+    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" seed="3" />
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
 
 <Layout title="ブログ一覧">
   <h1>ブログ</h1>
@@ -61,11 +67,13 @@ const postsByCategory = categories.map((category) => ({
 
 <style>
   h1 {
-    background: linear-gradient(135deg, #6366f1, #ec4899);
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ff8fab, #ffb56b);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 2.5rem;
+    font-size: 2.6rem;
   }
 
   .category-nav {
@@ -76,53 +84,88 @@ const postsByCategory = categories.map((category) => ({
   }
 
   .category-badge {
-    padding: 0.5rem 1.2rem;
+    padding: 0.6rem 1.4rem;
     border-radius: 999px;
     text-decoration: none;
     font-size: 0.9rem;
-    font-weight: 600;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    font-weight: 700;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-soft);
   }
 
   .category-badge:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px) scale(1.03);
   }
 
-  /* カテゴリごとの色分け */
+  /* カテゴリごとの色分け(夜バージョン:淡く発光するような色味) */
   .category-badge.gadget {
-    background: #dbeafe;
-    color: #1d4ed8;
+    background: #2e3a5c;
+    color: #9db8ff;
   }
   .category-badge.reading {
-    background: #dcfce7;
-    color: #15803d;
+    background: #2c4535;
+    color: #8fe0a8;
   }
   .category-badge.outdoor {
-    background: #ffedd5;
-    color: #c2410c;
+    background: #4a3524;
+    color: #ffb877;
   }
 
-  .category-section {
-    margin-bottom: 3rem;
-    padding: 1.5rem;
-    border-radius: 16px;
-    background: #fafafa;
-  }
+.category-section {
+  position: relative;
+  margin-bottom: 3rem;
+  padding: 1.8rem;
+  border-radius: 20px;
+  background: transparent;
+}
+
+.category-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: var(--color-surface);
+  border: 3px solid transparent;
+  box-shadow: var(--shadow-soft);
+  z-index: -1;
+}
+
+.category-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.category-section.gadget::before {
+  inset: -6px -3px -4px -5px;
+  border-color: #6b83c9;
+  transform: rotate(-1.2deg);
+}
+.category-section.reading::before {
+  inset: 3px 6px 5px 3px;
+  border-color: #6bc98a;
+  transform: rotate(1deg);
+}
+.category-section.outdoor::before {
+  inset: -6px 4px 3px -6px;
+  border-color: #d99a5f;
+  transform: rotate(-0.8deg);
+}
 
   .category-section h2 {
     display: inline-block;
     padding-bottom: 0.3rem;
-    border-bottom: 3px solid;
+    border-bottom: 4px solid;
+    border-radius: 2px;
   }
 
-  .category-section.gadget h2 { border-color: #3b82f6; }
-  .category-section.reading h2 { border-color: #22c55e; }
-  .category-section.outdoor h2 { border-color: #f97316; }
+  .category-section.gadget h2 { border-color: #6b83c9; color: var(--color-text); }
+  .category-section.reading h2 { border-color: #6bc98a; color: var(--color-text); }
+  .category-section.outdoor h2 { border-color: #d99a5f; color: var(--color-text); }
 
   .category-section h2 a {
     text-decoration: none;
-    color: #1f2937;
+    color: var(--color-text);
   }
 
   .post-list {
@@ -135,31 +178,38 @@ const postsByCategory = categories.map((category) => ({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.9rem 1rem;
-    margin-bottom: 0.5rem;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    transition: transform 0.15s ease;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.6rem;
+    background: #4a3f52;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
   .post-list li:hover {
     transform: translateX(4px);
+    box-shadow: var(--shadow-soft);
   }
 
   .post-list a {
-    text-decoration: none;
-    color: #111827;
-    font-weight: 500;
-  }
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 600;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.post-list li:hover a {
+  color: #e8b98a;
+  text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
+}
 
   .date {
-    color: #9ca3af;
+    color: var(--color-text-muted);
     font-size: 0.85rem;
   }
 
   .no-posts {
-    color: #9ca3af;
+    color: var(--color-text-muted);
     font-style: italic;
   }
 </style>
