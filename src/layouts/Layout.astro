@@ -36,36 +36,34 @@ const { title, description = '' } = Astro.props;
 </body>
 
 <script>
-let pressTimer: ReturnType<typeof setTimeout> | null = null;
-let touchMoved = false;
-let startX = 0;
-let startY = 0;
+	const moon = document.getElementById('moon');
+	const moonMenu = document.getElementById('moonMenu');
+	const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-moon?.addEventListener('touchstart', (e) => {
-	touchMoved = false;
-	const touch = e.touches[0];
-	startX = touch.clientX;
-	startY = touch.clientY;
-	pressTimer = setTimeout(() => {
-		if (!touchMoved) {
-			moonMenu?.classList.add('moon-menu-open');
-		}
-	}, 500);
-});
+	if (isMobile) {
+		// スマホ:タップでメニューの開閉のみ
+		moon?.addEventListener('click', (e) => {
+			e.stopPropagation();
+			moonMenu?.classList.toggle('moon-menu-open');
+		});
+	} else {
+		// PC:左クリックで移動、右クリックでメニュー
+		moon?.addEventListener('click', () => {
+			moon.classList.toggle('moon-moved');
+			moonMenu?.classList.remove('moon-menu-open');
+		});
 
-moon?.addEventListener('touchmove', (e) => {
-	const touch = e.touches[0];
-	const dx = Math.abs(touch.clientX - startX);
-	const dy = Math.abs(touch.clientY - startY);
-	if (dx > 10 || dy > 10) {
-		touchMoved = true;
-		if (pressTimer) clearTimeout(pressTimer);
+		moon?.addEventListener('contextmenu', (e) => {
+			e.preventDefault();
+			moonMenu?.classList.toggle('moon-menu-open');
+		});
 	}
-});
 
-moon?.addEventListener('touchend', () => {
-	if (pressTimer) clearTimeout(pressTimer);
-});
+	document.addEventListener('click', (e) => {
+		if (e.target !== moon) {
+			moonMenu?.classList.remove('moon-menu-open');
+		}
+	});
 </script>
 </html>
 
