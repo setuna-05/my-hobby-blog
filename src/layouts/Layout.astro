@@ -39,14 +39,37 @@ const { title, description = '' } = Astro.props;
 	const moon = document.getElementById('moon');
 	const moonMenu = document.getElementById('moonMenu');
 
+	let pressTimer: ReturnType<typeof setTimeout> | null = null;
+	let touchMoved = false;
+
 	moon?.addEventListener('click', () => {
 		moon.classList.toggle('moon-moved');
 		moonMenu?.classList.remove('moon-menu-open');
 	});
 
+	// PC向け:右クリックでメニュー表示
 	moon?.addEventListener('contextmenu', (e) => {
 		e.preventDefault();
 		moonMenu?.classList.toggle('moon-menu-open');
+	});
+
+	// スマホ向け:独自の長押し検知
+	moon?.addEventListener('touchstart', () => {
+		touchMoved = false;
+		pressTimer = setTimeout(() => {
+			if (!touchMoved) {
+				moonMenu?.classList.add('moon-menu-open');
+			}
+		}, 500);
+	});
+
+	moon?.addEventListener('touchmove', () => {
+		touchMoved = true;
+		if (pressTimer) clearTimeout(pressTimer);
+	});
+
+	moon?.addEventListener('touchend', () => {
+		if (pressTimer) clearTimeout(pressTimer);
 	});
 
 	document.addEventListener('click', (e) => {
@@ -73,11 +96,12 @@ const { title, description = '' } = Astro.props;
 		padding: 1rem 1rem;
 	}
 
-	.moon-deco {
-		top: 70px;
-		right: 20px;
-		font-size: 1.8rem;
-	}
+.moon-deco {
+	/* 既存のスタイルはそのまま */
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
 
 	.moon-deco.moon-moved {
 		right: calc(100% - 60px);
