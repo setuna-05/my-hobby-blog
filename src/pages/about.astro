@@ -18,6 +18,9 @@ import Layout from '../layouts/Layout.astro';
 <div class="wireframe-box box-sns">
   <span class="box-badge">SNS</span>
   <div class="sns-links">
+  <a href="https://www.youtube.com/@setuna_kasumi-0" target="_blank" class="sns-link">
+      <span class="sns-name">YouTube</span>
+    </a>
     <a href="https://www.nicovideo.jp/user/142063184" target="_blank" class="sns-link">
       <span class="sns-name">ニコニコ動画</span>
     </a>
@@ -131,11 +134,10 @@ import Layout from '../layouts/Layout.astro';
 }
 
 .box-profile .profile-tagline {
-  font-family: 'Yomogi', sans-serif;
-  color: #b98fd9;
+  color: var(--color-text-muted);
   font-size: 1.5rem;
+  font-weight: 600;
 }
-
 
 .box-sns {
   width: 520px;
