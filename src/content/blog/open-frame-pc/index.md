@@ -1,5 +1,5 @@
 ---
-title: 'オープンフレーム　　でPCを組みました'
+title: 'オープンフレームでPCを組みました'
 description: 'オープンフレームでPCを組みました'
 pubDate: 2026-07-24
 category: "other"
