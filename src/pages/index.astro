@@ -46,14 +46,18 @@ const postsByCategory = categories.map((category) => ({
 			) : (
 				<div class="row-scroll">
 					{posts.map((post) => (
-						<a href={`/blog/${post.id}/`} class={`video-card ${category}`}>
-							<div class="thumbnail">
-								<span class="thumbnail-label">{label}</span>
-							</div>
-							<div class="video-title">{post.data.title}</div>
-							<div class="video-date">{post.data.pubDate.toLocaleDateString('ja-JP')}</div>
-						</a>
-					))}
+	<a href={`/blog/${post.id}/`} class={`video-card ${category}`}>
+		<div class="thumbnail">
+			{post.data.thumbnail ? (
+				<img src={post.data.thumbnail} alt={post.data.title} class="thumbnail-img" />
+			) : (
+				<span class="thumbnail-label">{label}</span>
+			)}
+		</div>
+		<div class="video-title">{post.data.title}</div>
+		<div class="video-date">{post.data.pubDate.toLocaleDateString('ja-JP')}</div>
+	</a>
+))}
 				</div>
 			)}
 		</section>
@@ -213,6 +217,14 @@ const postsByCategory = categories.map((category) => ({
 		color: var(--color-text-muted);
 		font-size: 0.8rem;
 	}
+
+	.thumbnail-img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	border-radius: 12px;
+	background: var(--color-bg);
+}
 
 	@media (max-width: 768px) {
 		.channel-banner {

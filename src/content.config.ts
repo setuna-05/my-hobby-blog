@@ -16,6 +16,7 @@ const blog = defineCollection({
 			heroImage: z.optional(image()),
 			category: z.enum(['bicycle', 'writing', 'other']),
 			draft: z.boolean().optional().default(false),
+			thumbnail: z.string().optional(),
 		}),
 });
 
