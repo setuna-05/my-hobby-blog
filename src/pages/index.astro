@@ -1,49 +1,225 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const categoryLabels: Record<string, string> = {
+  bicycle: '自転車',
+  writing: '執筆',
+  other: 'その他',
+};
+
+const categories = ['bicycle', 'writing', 'other'] as const;
+
+const allPosts = await getCollection('blog', ({ data }) => {
+  return data.draft !== true;
+});
+allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsByCategory = categories.map((category) => ({
+  category,
+  label: categoryLabels[category],
+  posts: allPosts.filter((post) => post.data.category === category).slice(0, 6),
+}));
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<div class="channel-banner">
+		<div class="channel-avatar">
+			<img src="/images/icon.jpg" alt="アイコン" />
+		</div>
+	</div>
+
+	<div class="channel-info">
+		<h1>{SITE_TITLE}</h1>
+		<p class="channel-desc">{SITE_DESCRIPTION}</p>
+	</div>
+
+	{postsByCategory.map(({ category, label, posts }) => (
+		<section class="video-row">
+			<div class="row-header">
+				<h2>{label}</h2>
+				<a href={`/blog/${category}/`} class="see-all">すべて見る →</a>
+			</div>
+			{posts.length === 0 ? (
+				<p class="no-posts">まだ記事がありません</p>
+			) : (
+				<div class="row-scroll">
+					{posts.map((post) => (
+						<a href={`/blog/${post.id}/`} class={`video-card ${category}`}>
+							<div class="thumbnail">
+								<span class="thumbnail-label">{label}</span>
+							</div>
+							<div class="video-title">{post.data.title}</div>
+							<div class="video-date">{post.data.pubDate.toLocaleDateString('ja-JP')}</div>
+						</a>
+					))}
+				</div>
+			)}
+		</section>
+	))}
+</Layout>
+
+<style>
+	.channel-banner {
+		position: relative;
+		width: 100%;
+		height: 180px;
+		border-radius: 20px;
+		background: linear-gradient(135deg, #3a3042, #2a2233 60%, #4a3f52);
+		box-shadow: var(--shadow-soft);
+		margin-bottom: 4.5rem;
+		overflow: visible;
+	}
+
+	.channel-avatar {
+		position: absolute;
+		bottom: -45px;
+		left: 40px;
+		width: 110px;
+		height: 110px;
+		border-radius: 50%;
+		overflow: hidden;
+		border: 4px solid var(--color-bg);
+		box-shadow: 0 0 20px rgba(255, 143, 171, 0.25);
+	}
+
+	.channel-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.channel-info {
+		margin-bottom: 3rem;
+	}
+
+	.channel-info h1 {
+		font-family: 'M PLUS Rounded 1c', sans-serif;
+		font-weight: 800;
+		font-size: 2.2rem;
+		color: var(--color-text);
+		margin: 0 0 0.5rem 0;
+	}
+
+	.channel-desc {
+		color: var(--color-text-muted);
+		font-size: 1rem;
+	}
+
+	.video-row {
+		margin-bottom: 3rem;
+	}
+
+	.row-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin-bottom: 1rem;
+	}
+
+	.row-header h2 {
+		font-family: 'M PLUS Rounded 1c', sans-serif;
+		color: var(--color-text);
+		font-size: 1.4rem;
+		margin: 0;
+	}
+
+	.see-all {
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-size: 0.85rem;
+		transition: color 0.2s ease;
+	}
+
+	.see-all:hover {
+		color: #ffb98f;
+	}
+
+	.no-posts {
+		color: var(--color-text-muted);
+		font-style: italic;
+	}
+
+	.row-scroll {
+		display: flex;
+		gap: 1.2rem;
+		overflow-x: auto;
+		padding-bottom: 0.5rem;
+		scrollbar-width: thin;
+	}
+
+	.video-card {
+		flex: 0 0 220px;
+		text-decoration: none;
+		display: block;
+		transition: transform 0.2s ease;
+	}
+
+	.video-card:hover {
+		transform: translateY(-4px);
+	}
+
+	.thumbnail {
+		width: 100%;
+		aspect-ratio: 16 / 9;
+		border-radius: 12px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 0.6rem;
+		box-shadow: var(--shadow-soft);
+	}
+
+	.thumbnail-label {
+		font-family: 'M PLUS Rounded 1c', sans-serif;
+		font-weight: 700;
+		font-size: 1.1rem;
+		color: rgba(255, 255, 255, 0.85);
+	}
+
+	.video-card.bicycle .thumbnail {
+		background: linear-gradient(135deg, #4a5a8c, #2e3a5c);
+	}
+	.video-card.writing .thumbnail {
+		background: linear-gradient(135deg, #4a8c63, #2c4535);
+	}
+	.video-card.other .thumbnail {
+		background: linear-gradient(135deg, #b87a3e, #4a3524);
+	}
+
+	.video-title {
+		color: var(--color-text);
+		font-size: 0.95rem;
+		font-weight: 600;
+		line-height: 1.4;
+		margin-bottom: 0.3rem;
+	}
+
+	.video-date {
+		color: var(--color-text-muted);
+		font-size: 0.8rem;
+	}
+
+	@media (max-width: 768px) {
+		.channel-banner {
+			height: 130px;
+			margin-bottom: 3.5rem;
+		}
+
+		.channel-avatar {
+			width: 85px;
+			height: 85px;
+			left: 20px;
+			bottom: -35px;
+		}
+
+		.channel-info h1 {
+			font-size: 1.7rem;
+		}
+
+		.video-card {
+			flex: 0 0 160px;
+		}
+	}
+</style>

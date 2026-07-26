@@ -2,70 +2,40 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
-// カテゴリの日本語表示名を定義(必要に応じて増やせます)
 const categoryLabels: Record<string, string> = {
-  gadget: 'ガジェット',
-  reading: '読書',
-  outdoor: 'アウトドア',
+  bicycle: '自転車',
+  writing: '執筆',
+  other: 'その他',
 };
 
-// 全記事を取得し、公開日順に並び替え
-// 全記事を取得(下書きは除外)し、公開日順に並び替え
 const allPosts = await getCollection('blog', ({ data }) => {
   return data.draft !== true;
 });
 allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-
-// カテゴリごとに記事をグループ分け
-const categories = ['gadget', 'reading', 'outdoor'] as const;
-const postsByCategory = categories.map((category) => ({
-  category,
-  label: categoryLabels[category],
-  posts: allPosts.filter((post) => post.data.category === category),
-}));
 ---
-<svg width="0" height="0" style="position: absolute;">
-  <filter id="wobbly">
-    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" result="noise" seed="3" />
-    <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" />
-  </filter>
-</svg>
 
-<Layout title="ブログ一覧">
-  <h1>ブログ</h1>
+<Layout title="記事一覧">
+  <h1>記事一覧</h1>
 
-  <!-- カテゴリナビゲーション -->
-  <nav class="category-nav">
-    {postsByCategory.map(({ category, label, posts }) => (
-     <a href={`/blog/${category}/`} class={`category-badge ${category}`}>
-  {label} ({posts.length})
-</a>
-    ))}
-  </nav>
-
-  <!-- カテゴリごとに記事を表示 -->
-  {postsByCategory.map(({ category, label, posts }) => (
-    <section class={`category-section ${category}`}>
-      <h2>
-        <a href={`/blog/${category}/`}>{label}</a>
-      </h2>
-
-      {posts.length === 0 ? (
-        <p class="no-posts">まだ記事がありません</p>
-      ) : (
-        <ul class="post-list">
-          {posts.map((post) => (
-            <li>
-              <a href={`/blog/${post.id}/`}>{post.data.title}</a>
-              <span class="date">
-                {post.data.pubDate.toLocaleDateString('ja-JP')}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  ))}
+  {allPosts.length === 0 ? (
+    <p class="no-posts">まだ記事がありません</p>
+  ) : (
+    <ul class="post-list">
+      {allPosts.map((post) => (
+        <li>
+          <a href={`/blog/${post.id}/`}>
+            <span class={`category-tag ${post.data.category}`}>
+              {categoryLabels[post.data.category]}
+            </span>
+            <span class="post-title">{post.data.title}</span>
+          </a>
+          <span class="date">
+            {post.data.pubDate.toLocaleDateString('ja-JP')}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )}
 </Layout>
 
 <style>
@@ -77,104 +47,13 @@ const postsByCategory = categories.map((category) => ({
     background-clip: text;
     color: transparent;
     font-size: 2.6rem;
-  }
-
-  .category-nav {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-  }
-
-  .category-badge {
-    padding: 0.6rem 1.4rem;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 700;
-    font-family: 'M PLUS Rounded 1c', sans-serif;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: var(--shadow-soft);
-  }
-
-  .category-badge:hover {
-    transform: translateY(-3px) scale(1.03);
-  }
-
-  /* カテゴリごとの色分け(夜バージョン:淡く発光するような色味) */
-  .category-badge.gadget {
-    background: #2e3a5c;
-    color: #9db8ff;
-  }
-  .category-badge.reading {
-    background: #2c4535;
-    color: #8fe0a8;
-  }
-  .category-badge.outdoor {
-    background: #4a3524;
-    color: #ffb877;
-  }
-
-.category-section {
-  position: relative;
-  margin-bottom: 3rem;
-  padding: 1.8rem;
-  border-radius: 20px;
-  background: transparent;
-}
-
-.category-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  background: var(--color-surface);
-  border: 3px solid transparent;
-  box-shadow: var(--shadow-soft);
-  z-index: -1;
-}
-
-.category-section > * {
-  position: relative;
-  z-index: 1;
-}
-
-.category-section.gadget::before {
-  inset: -6px -3px -4px -5px;
-  border-color: #6b83c9;
-  transform: rotate(-1.2deg);
-}
-.category-section.reading::before {
-  inset: 3px 6px 5px 3px;
-  border-color: #6bc98a;
-  transform: rotate(1deg);
-}
-.category-section.outdoor::before {
-  inset: -6px 4px 3px -6px;
-  border-color: #d99a5f;
-  transform: rotate(-0.8deg);
-}
-
-  .category-section h2 {
-    display: inline-block;
-    padding-bottom: 0.3rem;
-    border-bottom: 4px solid;
-    border-radius: 2px;
-  }
-
-  .category-section.gadget h2 { border-color: #6b83c9; color: var(--color-text); }
-  .category-section.reading h2 { border-color: #6bc98a; color: var(--color-text); }
-  .category-section.outdoor h2 { border-color: #d99a5f; color: var(--color-text); }
-
-  .category-section h2 a {
-    text-decoration: none;
-    color: var(--color-text);
+    margin-bottom: 2rem;
   }
 
   .post-list {
     list-style: none;
     padding: 0;
-    margin-top: 1rem;
+    margin: 0;
   }
 
   .post-list li {
@@ -183,7 +62,7 @@ const postsByCategory = categories.map((category) => ({
     align-items: center;
     padding: 1rem 1.2rem;
     margin-bottom: 0.6rem;
-    background: #4a3f52;
+    background: var(--color-surface);
     border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -194,71 +73,84 @@ const postsByCategory = categories.map((category) => ({
     box-shadow: var(--shadow-soft);
   }
 
-  .post-list a {
-  text-decoration: none;
-  color: var(--color-text);
-  font-weight: 600;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
-}
+  .post-list li a {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    flex: 1;
+    min-width: 0;
+  }
 
-.post-list li:hover a {
-  color: #e8b98a;
-  text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
-}
+  .category-tag {
+    flex-shrink: 0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+  }
+
+  .category-tag.bicycle {
+    background: #2e3a5c;
+    color: #9db8ff;
+  }
+  .category-tag.writing {
+    background: #2c4535;
+    color: #8fe0a8;
+  }
+  .category-tag.other {
+    background: #4a3524;
+    color: #ffb877;
+  }
+
+  .post-title {
+    color: var(--color-text);
+    font-weight: 600;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .post-list li:hover .post-title {
+    color: #e8b98a;
+    text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
+  }
 
   .date {
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-  }
+  flex-shrink: 0;
+  color: #9db8ff;
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
+  margin-left: 1rem;
+  letter-spacing: 0.02em;
+}
 
   .no-posts {
     color: var(--color-text-muted);
     font-style: italic;
   }
 
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2.2rem;
-  }
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 1.9rem;
+    }
 
-  .category-badge {
-    padding: 0.5rem 1.1rem;
-    font-size: 0.85rem;
-  }
+    .post-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.9rem 1rem;
+    }
 
-  .category-section h2 {
-    font-size: 1.6rem;
-  }
-}
+    .post-list li a {
+      width: 100%;
+    }
 
-  .category-nav {
-    gap: 0.5rem;
-    margin-bottom: 1.8rem;
+    .date {
+      margin-left: 0;
+    }
   }
-
-  .category-badge {
-    padding: 0.45rem 1rem;
-    font-size: 0.8rem;
-  }
-
-  .category-section {
-    padding: 1.2rem;
-    margin-bottom: 2rem;
-  }
-
-  .category-section h2 {
-    font-size: 1.4rem;
-  }
-
-  .post-list li {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.3rem;
-    padding: 0.8rem 1rem;
-  }
-
-  .date {
-    font-size: 0.75rem;
-  }
-}
 </style>
