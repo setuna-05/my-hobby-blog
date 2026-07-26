@@ -206,15 +206,45 @@ import Layout from '../layouts/Layout.astro';
 }
 
   @media (max-width: 768px) {
-    h1 {
-      font-size: 1.9rem;
-    }
-
-    .box-profile,
-    .box-sns {
-      width: 100%;
-      height: auto;
-      min-height: 200px;
-    }
+  .wireframe-area {
+    position: static;
+    left: 0;
+    margin-top: 1rem;
+    margin-left: 0;
+    gap: 3rem;
+    width: 100%;
   }
+
+  .box-profile,
+  .box-sns {
+    width: 100%;
+    height: auto;
+    min-height: 180px;
+  }
+
+  .profile-header {
+    gap: 1.2rem;
+  }
+
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-header .profile-name {
+    font-size: 1.6rem;
+  }
+
+  .box-profile .profile-tagline {
+    font-size: 1.1rem;
+  }
+
+  .box-badge {
+  font-size: 2rem;
+  min-width: 60px;
+  height: 32px;
+  top: -18px;
+  left: -14px;
+}
+}
 </style>
