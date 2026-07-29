@@ -20,14 +20,14 @@ Astroで構築し、Vercelでホスティングしています。
 
 ## ディレクトリ構成
 
-​```
+<pre>
 src/
   components/       ヘッダー・フッター・月/傘の演出など
   content/blog/      記事本体(フォルダごとにindex.md + 画像)
   layouts/           ページの共通レイアウト
   pages/             各ページ(トップ、記事一覧、Aboutなど)
   content.config.ts  記事のカテゴリ・スキーマ定義
-​```
+</pre>
 
 ## 記事の追加方法
 1. \`src/content/blog/\` に新しいフォルダを作成(例: \`new-post/\`)
