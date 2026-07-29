@@ -20,7 +20,7 @@ Astroで構築し、Vercelでホスティングしています。
 
 ## ディレクトリ構成
 
-​```
+​```text
 src/
 ├── components/      # ヘッダー・フッター・月/傘の演出など
 ├── content/blog/     # 記事本体(フォルダごとにindex.md + 画像)
