@@ -2,6 +2,8 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import MoonWidget from '../components/MoonWidget.astro';
+import RainDeco from '../components/RainDeco.astro';
 
 interface Props {
 	title: string;
@@ -18,163 +20,20 @@ const isHomePage = Astro.url.pathname === '/';
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Zen+Maru+Gothic:wght@400;500;700&display=swap"
+			href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Zen+Maru+Gothic:wght@400;500;700&family=Yomogi&display=swap"
 			rel="stylesheet"
 		/>
-		<link
-	href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Zen+Maru+Gothic:wght@400;500;700&family=Yomogi&display=swap"
-	rel="stylesheet"
-/>
 	</head>
-<body>
-	<div class="moon-deco" id="moon">🌙</div>
-	<nav class="moon-menu" id="moonMenu">
-		<a href="/">トップ</a>
-		<a href="/blog/bicycle/">自転車</a>
-		<a href="/blog/writing/">執筆</a>
-		<a href="/blog/other/">その他</a>
-	</nav>
+	<body>
+		<MoonWidget />
+		{isHomePage && <RainDeco />}
 
-	{isHomePage && (
-	<>
-		<!-- 左側余白の装飾:傘と水滴 -->
-		<div class="rain-deco">
-			<div class="raindrop" style="top: 5%; left: 30%;"></div>
-			<div class="raindrop" style="top: 14%; left: 60%;"></div>
-			<div class="raindrop" style="top: 22%; left: 15%;"></div>
-			<div class="raindrop" style="top: 31%; left: 45%;"></div>
-			<div class="raindrop" style="top: 40%; left: 70%;"></div>
-			<div class="raindrop" style="top: 48%; left: 25%;"></div>
-			<div class="raindrop" style="top: 57%; left: 55%;"></div>
-			<div class="raindrop" style="top: 65%; left: 10%;"></div>
-			<div class="raindrop" style="top: 73%; left: 40%;"></div>
-
-			<svg class="umbrella-svg" id="umbrella" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-				<path d="M60 20 C 30 20, 10 45, 10 55 C 20 48, 30 55, 40 55 C 50 48, 55 55, 60 55 C 65 55, 70 48, 80 55 C 90 55, 100 48, 110 55 C 110 45, 90 20, 60 20 Z"
-					fill="currentColor" opacity="0.4" />
-				<line x1="60" y1="20" x2="60" y2="95" stroke="currentColor" stroke-width="2" opacity="0.4" />
-				<path d="M60 95 C 60 102, 68 102, 68 95" fill="none" stroke="currentColor" stroke-width="2" opacity="0.4" />
-			</svg>
-		</div>
-	</>
-)}
-
-
-
-	<Header />
-	<main>
-		<slot />
-	</main>
-	<Footer />
-</body>
-
-<script>
-	const moon = document.getElementById('moon');
-	const moonMenu = document.getElementById('moonMenu');
-	const isMobile = window.matchMedia('(max-width: 768px)').matches;
-
-	function createShootingStar() {
-		const star = document.createElement('div');
-		star.className = 'shooting-star';
-
-		// 開始位置:右端、上下にランダムな揺らぎ
-		const startX = window.innerWidth - 20;
-		const startY = window.innerHeight * (0.05 + Math.random() * 0.3);
-
-		// 終了位置:左端、こちらも上下に少し揺らぎ
-		const endX = 20;
-		const endY = window.innerHeight * (0.35 + Math.random() * 0.3);
-
-		const deltaX = endX - startX;
-		const deltaY = endY - startY;
-		const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-
-		// 色のバリエーション(白・淡いブルー・淡いピンク・淡いイエロー)
-		const colors = [
-			{ core: '255,255,255', tail: '255,255,255' },
-			{ core: '200,220,255', tail: '180,210,255' },
-			{ core: '255,210,230', tail: '255,190,220' },
-			{ core: '255,240,200', tail: '255,225,170' },
-		];
-		const color = colors[Math.floor(Math.random() * colors.length)];
-
-		star.style.left = `${startX}px`;
-		star.style.top = `${startY}px`;
-		star.style.setProperty('--deltaX', `${deltaX}px`);
-		star.style.setProperty('--deltaY', `${deltaY}px`);
-		star.style.setProperty('--angle', `${angle}deg`);
-		star.style.setProperty('--core-color', color.core);
-		star.style.setProperty('--tail-color', color.tail);
-
-		document.body.appendChild(star);
-
-		star.addEventListener('animationend', () => {
-			star.remove();
-		});
-	}
-
-	if (isMobile) {
-		moon?.addEventListener('touchend', (e) => {
-			e.preventDefault();
-			e.stopPropagation();
-			moonMenu?.classList.toggle('moon-menu-open');
-		});
-	} else {
-		moon?.addEventListener('click', () => {
-			moonMenu?.classList.toggle('moon-menu-open');
-		});
-
-		moon?.addEventListener('contextmenu', (e) => {
-			e.preventDefault();
-			createShootingStar();
-		});
-	}
-
-	function createRipple() {
-	const ripple = document.createElement('div');
-	ripple.className = 'ripple';
-
-	// 画面全体のランダムな位置
-	const randomX = Math.random() * window.innerWidth;
-	const randomY = Math.random() * window.innerHeight;
-	ripple.style.left = `${randomX}px`;
-	ripple.style.top = `${randomY}px`;
-
-	document.body.appendChild(ripple);
-
-	ripple.addEventListener('animationend', () => {
-		ripple.remove();
-	});
-}
-
-setInterval(createRipple, 4000);
-
-const umbrella = document.getElementById('umbrella');
-let rainInterval: ReturnType<typeof setInterval> | null = null;
-
-umbrella?.addEventListener('click', () => {
-	if (rainInterval) {
-		clearInterval(rainInterval);
-	}
-
-	if (window.location.pathname === '/') {
-		rainInterval = setInterval(createRipple, 50);
-	}
-
-	setTimeout(() => {
-		if (rainInterval) {
-			clearInterval(rainInterval);
-			rainInterval = null;
-		}
-	}, 5000);
-});
-
-	document.addEventListener('click', (e) => {
-		if (e.target !== moon) {
-			moonMenu?.classList.remove('moon-menu-open');
-		}
-	});
-</script>
+		<Header />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+	</body>
 </html>
 
 <style is:global>
@@ -211,194 +70,6 @@ umbrella?.addEventListener('click', () => {
 		position: relative;
 	}
 
-	.moon-deco {
-	position: fixed;
-	top: 90px;
-	right: 60px;
-	font-size: 2.5rem;
-	opacity: 0.85;
-	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-	cursor: pointer;
-	z-index: 9999;
-	transition: filter 0.3s ease, transform 0.3s ease;
-}
-
-.moon-deco:hover {
-	filter: grayscale(1) brightness(1.6) drop-shadow(0 0 10px rgba(232, 185, 138, 0.7));
-	transform: scale(1.1);
-}
-
-.moon-menu {
-	position: fixed;
-	top: 150px;
-	right: 60px;
-	display: flex;
-	flex-direction: column;
-	gap: 0.4rem;
-	background: var(--color-surface);
-	border-radius: 16px;
-	padding: 0.8rem;
-	box-shadow: var(--shadow-soft);
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(-8px);
-	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-	z-index: 9999;
-}
-
-	.moon-menu a {
-		color: var(--color-text);
-		text-decoration: none;
-		font-size: 0.9rem;
-		font-weight: 600;
-		padding: 0.4rem 0.8rem;
-		border-radius: 10px;
-		transition: color 0.2s ease, text-shadow 0.2s ease;
-		white-space: nowrap;
-	}
-
-	.moon-menu a:hover {
-		color: #e8b98a;
-		text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
-	}
-
-	.moon-menu.moon-menu-open {
-		opacity: 1;
-		visibility: visible;
-		transform: translateY(0);
-	}
-
-	.shooting-star {
-	position: fixed;
-	width: 5px;
-	height: 5px;
-	background: rgb(var(--core-color));
-	border-radius: 50%;
-	box-shadow:
-		0 0 16px 4px rgba(var(--core-color), 1),
-		0 0 30px 8px rgba(var(--core-color), 0.5);
-	z-index: 5000;
-	pointer-events: none;
-	animation: shooting-star-fly 4s linear forwards;
-}
-
-.shooting-star::before {
-	content: '';
-	position: absolute;
-	top: 50%;
-	right: 0;
-	width: 140px;
-	height: 2px;
-	background: linear-gradient(to left, rgba(var(--tail-color), 0.9), transparent);
-	transform: translateY(-50%) rotate(var(--angle));
-	transform-origin: right center;
-}
-
-.quill-deco {
-	position: fixed;
-	top: 50%;
-	transform: translateY(-50%);
-	width: 100px;
-	height: 60vh;
-	max-height: 500px;
-	color: #b98fd9;
-	pointer-events: none;
-	z-index: 0;
-}
-
-.rain-deco {
-	position: fixed;
-	top: 0;
-	left: 10vw;
-	width: 90px;
-	height: 96vh;
-	color: #9db8ff;
-	pointer-events: none;
-	z-index: 0;
-}
-
-.umbrella-svg {
-	position: absolute;
-	bottom: 5%;
-	left: 50%;
-	width: 250px;
-	height: 250px;
-	transform: translateX(-50%) rotate(-15deg);
-}
-
-.ripple {
-	position: fixed;
-	width: 16px;
-	height: 8px;
-	margin-left: -8px;
-	border: 2px solid #9db8ff;
-	border-radius: 50%;
-	opacity: 0;
-	pointer-events: none;
-	z-index: 0;
-	animation: ripple-spread 3.5s ease-out forwards;
-}
-
-.umbrella-svg {
-	position: absolute;
-	bottom: 5%;
-	left: 50%;
-	width: 250px;
-	height: 250px;
-	transform: translateX(-50%) rotate(-15deg);
-	cursor: pointer;
-	pointer-events: auto;
-	transition: transform 0.2s ease;
-}
-
-.umbrella-svg:hover {
-	transform: translateX(-50%) rotate(-15deg) scale(1.05);
-}
-
-@keyframes ripple-spread {
-	0% {
-		width: 16px;
-		height: 8px;
-		margin-left: -8px;
-		opacity: 0;
-	}
-	10% {
-		opacity: 0.6;
-	}
-	70% {
-		opacity: 0.2;
-	}
-	100% {
-		width: 160px;
-		height: 80px;
-		margin-left: -80px;
-		opacity: 0;
-	}
-}
-
-@media (max-width: 1200px) {
-	.ripple-deco {
-		display: none;
-	}
-}
-
-@media (max-width: 1200px) {
-	.rain-deco {
-		display: none;
-	}
-}
-
-@keyframes shooting-star-fly {
-	0% {
-		transform: translate(0, 0);
-		opacity: 1;
-	}
-	100% {
-		transform: translate(var(--deltaX), var(--deltaY));
-		opacity: 0;
-	}
-}
-
 	main {
 		max-width: 800px;
 		margin: 0 auto;
@@ -410,20 +81,8 @@ umbrella?.addEventListener('click', () => {
 	}
 
 	@media (max-width: 768px) {
-	main {
-		padding: 1rem 1rem;
+		main {
+			padding: 1rem 1rem;
+		}
 	}
-
-	.moon-deco {
-		top: 85px;
-		right: 20px;
-		font-size: 2rem;
-	}
-
-	.moon-menu {
-		top: 130px;
-		right: 20px;
-		padding: 0.6rem;
-	}
-}
 </style>

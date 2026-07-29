@@ -1,0 +1,183 @@
+<div class="moon-deco" id="moon">🌙</div>
+<nav class="moon-menu" id="moonMenu">
+	<a href="/">トップ</a>
+	<a href="/blog/bicycle/">自転車</a>
+	<a href="/blog/writing/">執筆</a>
+	<a href="/blog/other/">その他</a>
+</nav>
+
+<style is:global>
+	.moon-deco {
+		position: fixed;
+		top: 90px;
+		right: 60px;
+		font-size: 2.5rem;
+		opacity: 0.85;
+		filter: grayscale(1) brightness(1.6) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+		cursor: pointer;
+		z-index: 9999;
+		transition: filter 0.3s ease, transform 0.3s ease;
+	}
+
+	.moon-deco:hover {
+		filter: grayscale(1) brightness(1.6) drop-shadow(0 0 10px rgba(232, 185, 138, 0.7));
+		transform: scale(1.1);
+	}
+
+	.moon-menu {
+		position: fixed;
+		top: 150px;
+		right: 60px;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		background: var(--color-surface);
+		border-radius: 16px;
+		padding: 0.8rem;
+		box-shadow: var(--shadow-soft);
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-8px);
+		transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+		z-index: 9999;
+	}
+
+	.moon-menu a {
+		color: var(--color-text);
+		text-decoration: none;
+		font-size: 0.9rem;
+		font-weight: 600;
+		padding: 0.4rem 0.8rem;
+		border-radius: 10px;
+		transition: color 0.2s ease, text-shadow 0.2s ease;
+		white-space: nowrap;
+	}
+
+	.moon-menu a:hover {
+		color: #e8b98a;
+		text-shadow: 0 0 4px rgba(232, 185, 138, 0.35);
+	}
+
+	.moon-menu.moon-menu-open {
+		opacity: 1;
+		visibility: visible;
+		transform: translateY(0);
+	}
+
+	.shooting-star {
+		position: fixed;
+		width: 5px;
+		height: 5px;
+		background: rgb(var(--core-color));
+		border-radius: 50%;
+		box-shadow:
+			0 0 16px 4px rgba(var(--core-color), 1),
+			0 0 30px 8px rgba(var(--core-color), 0.5);
+		z-index: 5000;
+		pointer-events: none;
+		animation: shooting-star-fly 4s linear forwards;
+	}
+
+	.shooting-star::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		right: 0;
+		width: 140px;
+		height: 2px;
+		background: linear-gradient(to left, rgba(var(--tail-color), 0.9), transparent);
+		transform: translateY(-50%) rotate(var(--angle));
+		transform-origin: right center;
+	}
+
+	@keyframes shooting-star-fly {
+		0% {
+			transform: translate(0, 0);
+			opacity: 1;
+		}
+		100% {
+			transform: translate(var(--deltaX), var(--deltaY));
+			opacity: 0;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.moon-deco {
+			top: 85px;
+			right: 20px;
+			font-size: 2rem;
+		}
+
+		.moon-menu {
+			top: 130px;
+			right: 20px;
+			padding: 0.6rem;
+		}
+	}
+</style>
+
+<script>
+	const moon = document.getElementById('moon');
+	const moonMenu = document.getElementById('moonMenu');
+	const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+	function createShootingStar() {
+		const star = document.createElement('div');
+		star.className = 'shooting-star';
+
+		const startX = window.innerWidth - 20;
+		const startY = window.innerHeight * (0.05 + Math.random() * 0.3);
+
+		const endX = 20;
+		const endY = window.innerHeight * (0.35 + Math.random() * 0.3);
+
+		const deltaX = endX - startX;
+		const deltaY = endY - startY;
+		const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+		const colors = [
+			{ core: '255,255,255', tail: '255,255,255' },
+			{ core: '200,220,255', tail: '180,210,255' },
+			{ core: '255,210,230', tail: '255,190,220' },
+			{ core: '255,240,200', tail: '255,225,170' },
+		];
+		const color = colors[Math.floor(Math.random() * colors.length)];
+
+		star.style.left = `${startX}px`;
+		star.style.top = `${startY}px`;
+		star.style.setProperty('--deltaX', `${deltaX}px`);
+		star.style.setProperty('--deltaY', `${deltaY}px`);
+		star.style.setProperty('--angle', `${angle}deg`);
+		star.style.setProperty('--core-color', color.core);
+		star.style.setProperty('--tail-color', color.tail);
+
+		document.body.appendChild(star);
+
+		star.addEventListener('animationend', () => {
+			star.remove();
+		});
+	}
+
+	if (isMobile) {
+		moon?.addEventListener('touchend', (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			moonMenu?.classList.toggle('moon-menu-open');
+		});
+	} else {
+		moon?.addEventListener('click', () => {
+			moonMenu?.classList.toggle('moon-menu-open');
+		});
+
+		moon?.addEventListener('contextmenu', (e) => {
+			e.preventDefault();
+			createShootingStar();
+		});
+	}
+
+	document.addEventListener('click', (e) => {
+		if (e.target !== moon) {
+			moonMenu?.classList.remove('moon-menu-open');
+		}
+	});
+</script>

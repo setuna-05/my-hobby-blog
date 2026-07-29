@@ -1,0 +1,125 @@
+<div class="rain-deco">
+	<div class="raindrop" style="top: 5%; left: 30%;"></div>
+	<div class="raindrop" style="top: 14%; left: 60%;"></div>
+	<div class="raindrop" style="top: 22%; left: 15%;"></div>
+	<div class="raindrop" style="top: 31%; left: 45%;"></div>
+	<div class="raindrop" style="top: 40%; left: 70%;"></div>
+	<div class="raindrop" style="top: 48%; left: 25%;"></div>
+	<div class="raindrop" style="top: 57%; left: 55%;"></div>
+	<div class="raindrop" style="top: 65%; left: 10%;"></div>
+	<div class="raindrop" style="top: 73%; left: 40%;"></div>
+
+	<svg class="umbrella-svg" id="umbrella" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+		<path d="M60 20 C 30 20, 10 45, 10 55 C 20 48, 30 55, 40 55 C 50 48, 55 55, 60 55 C 65 55, 70 48, 80 55 C 90 55, 100 48, 110 55 C 110 45, 90 20, 60 20 Z"
+			fill="currentColor" opacity="0.4" />
+		<line x1="60" y1="20" x2="60" y2="95" stroke="currentColor" stroke-width="2" opacity="0.4" />
+		<path d="M60 95 C 60 102, 68 102, 68 95" fill="none" stroke="currentColor" stroke-width="2" opacity="0.4" />
+	</svg>
+</div>
+
+<style is:global>
+	.rain-deco {
+		position: fixed;
+		top: 0;
+		left: 10vw;
+		width: 90px;
+		height: 96vh;
+		color: #9db8ff;
+		pointer-events: none;
+		z-index: 0;
+	}
+
+	.umbrella-svg {
+		position: absolute;
+		bottom: 5%;
+		left: 50%;
+		width: 250px;
+		height: 250px;
+		transform: translateX(-50%) rotate(-15deg);
+		cursor: pointer;
+		pointer-events: auto;
+		transition: transform 0.2s ease;
+	}
+
+	.umbrella-svg:hover {
+		transform: translateX(-50%) rotate(-15deg) scale(1.05);
+	}
+
+	.ripple {
+		position: fixed;
+		width: 16px;
+		height: 8px;
+		margin-left: -8px;
+		border: 2px solid #9db8ff;
+		border-radius: 50%;
+		opacity: 0;
+		pointer-events: none;
+		z-index: 0;
+		animation: ripple-spread 3.5s ease-out forwards;
+	}
+
+	@keyframes ripple-spread {
+		0% {
+			width: 16px;
+			height: 8px;
+			margin-left: -8px;
+			opacity: 0;
+		}
+		10% {
+			opacity: 0.6;
+		}
+		70% {
+			opacity: 0.2;
+		}
+		100% {
+			width: 160px;
+			height: 80px;
+			margin-left: -80px;
+			opacity: 0;
+		}
+	}
+
+	@media (max-width: 1200px) {
+		.rain-deco {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	function createRipple() {
+		const ripple = document.createElement('div');
+		ripple.className = 'ripple';
+
+		const randomX = Math.random() * window.innerWidth;
+		const randomY = Math.random() * window.innerHeight;
+		ripple.style.left = `${randomX}px`;
+		ripple.style.top = `${randomY}px`;
+
+		document.body.appendChild(ripple);
+
+		ripple.addEventListener('animationend', () => {
+			ripple.remove();
+		});
+	}
+
+	setInterval(createRipple, 4000);
+
+	const umbrella = document.getElementById('umbrella');
+	let rainInterval: ReturnType<typeof setInterval> | null = null;
+
+	umbrella?.addEventListener('click', () => {
+		if (rainInterval) {
+			clearInterval(rainInterval);
+		}
+
+		rainInterval = setInterval(createRipple, 50);
+
+		setTimeout(() => {
+			if (rainInterval) {
+				clearInterval(rainInterval);
+				rainInterval = null;
+			}
+		}, 5000);
+	});
+</script>
