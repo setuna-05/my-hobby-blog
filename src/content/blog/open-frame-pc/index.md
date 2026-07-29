@@ -9,7 +9,19 @@ draft: false
 
 どうも、雪梛というものです<br>
 今回はAmazonで購入したオープンフレームを使用してPCを組みましたためその内容を書いていこうと思います<br>
-では早速行きましょう
+では早速行きましょう<br>
+こちらはyoutubeにあげている動画になります↓
+
+<div style="position: relative; width: 100%; padding-top: 56.25%; border-radius: 14px; overflow: hidden; border: 3px solid #b98fd9; box-shadow: 0 4px 16px rgba(255, 143, 171, 0.15); margin: 1.5rem 0;">
+  <iframe
+    src="https://www.youtube.com/embed/ibbZ07RkNOQ"
+    title="YouTube video player"
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+</div>
 
 ### 構成パーツ
 * Ryzen7 5700
