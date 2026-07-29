@@ -94,7 +94,7 @@ draft: false
 マザボなら断腸の思いで何とか再購入できますがグラボは破産してしまうのでね
 
 そうして二日後、ようやく水冷が届きましたので作業を開始します<br>
-![水冷設置](/images/open-frame-pc/open-frame-pc-12.jpg "DeeeeeeeeeeeeeeeeeeepCoooooooooooooooooL")
+![水冷設置](/images/open-frame-pc/open-frame-pc-12.jpg "DeeeeeeeeeeeeeeeeeeePCoooooooooooooooooL")
 本当は奥側にファンがこちら側を向くようにセットしたかったのですがうまくいかなそうな気配がしたため最上階に移行
 
 背面のヒートシンク部分のねじ穴を使用して初使用のＬ字金具を噛ませます<br>
@@ -103,7 +103,7 @@ draft: false
 ![水冷用L字金具](/images/open-frame-pc/open-frame-pc-13.jpg "かっけぇけど画像が本文と微妙にあってない…")
 
 ちゃっかり移動している電源ボタンを押して起動確認…あら？<br>
-![起動確認](/images/open-frame-pc/open-frame-pc-14.jpg "軌道だぁ！やれ！セルマ〇クスぅ！")
+![起動確認](/images/open-frame-pc/open-frame-pc-14.jpg "起動だぁ！やれ！セルマ〇クスぅ！")
 水冷のポンプは機能しているのですがファンが回転しません<br>
 これはもちろん装着ミスで私の場合は下側にあったファン用の4pinに刺すことによって起動しました<br>
 ![ファン修正後の起動確認](/images/open-frame-pc/open-frame-pc-15.jpg "刺す位置は重要、はっきりわかんだね")
@@ -120,4 +120,4 @@ draft: false
 といったところでこの初めて書いた記事は締めさせていただきます
 
 
-ではまた次の記事で～
+ではまた次回会おうね～
