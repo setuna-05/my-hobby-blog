@@ -1,63 +1,53 @@
-# Astro Starter Kit: Blog
+# 雪梛のブログ
+多趣味なのでいろいろなことを気ままに文字に起こして記事にしています。
+Astroで構築し、Vercelでホスティングしています。
+このサイトは、Claude(Anthropic社のAI)とコードを書きながら運営しています。
+色々と遊び心があるサイトにしたくて実用的ではないおまけ機能もいくつか配置して遊んでいますやっぱりそういうのがあったほうが楽しい…楽しくない？
 
-```sh
-npm create astro@latest -- --template blog
-```
+**公開URL**: https://my-hobby-blog-pi.vercel.app/
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 使用技術
+- [Astro](https://astro.build/)
+- Vercel(ホスティング)
+- Google Analytics(アクセス解析)
 
-Features:
+## サイトの特徴
+- カテゴリ別(自転車 / 執筆 / その他)の記事管理
+- ダークテーマ+夜空をイメージした背景演出
+- 月アイコンをクリックするとカテゴリメニューが開く
+- 記事内の画像にカーソルを乗せるといいかもしれない
+- トップページの傘をクリックすると…
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and Open Graph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+## ディレクトリ構成
+\`\`\`
+src/
+├── components/      # ヘッダー・フッター・月/傘の演出など
+├── content/blog/     # 記事本体(フォルダごとにindex.md + 画像)
+├── layouts/          # ページの共通レイアウト
+├── pages/            # 各ページ(トップ、記事一覧、Aboutなど)
+└── content.config.ts # 記事のカテゴリ・スキーマ定義
+\`\`\`
 
-## 🚀 Project Structure
+## 記事の追加方法
+1. \`src/content/blog/\` に新しいフォルダを作成(例: \`new-post/\`)
+2. その中に \`index.md\` を作成し、frontmatter(タイトル・日付・カテゴリなど)と本文を記述
+3. 画像は \`public/images/記事名/\` に配置し、\`/images/記事名/ファイル名.jpg\` で参照
+4. 以下のコマンドで公開
+\`\`\`
+git add .
+git commit -m "add new post"
+git push
+\`\`\`
 
-Inside of your Astro project, you'll see the following folders and files:
+## ローカルでの動かし方
+\`\`\`
+npm install
+npm run dev
+\`\`\`
 
-```text
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+---
+不具合報告や「ここもっとこうしたら?」みたいな提案も歓迎です。
+気が向いたときにのんびり更新していく予定です。
 
 ## Credit
-
 This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
