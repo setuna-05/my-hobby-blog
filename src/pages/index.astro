@@ -4,12 +4,13 @@ import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const categoryLabels: Record<string, string> = {
-  bicycle: '自転車',
+  outdoor: 'アウトドア',
   writing: '執筆',
+  Maya: 'Maya',
   other: 'その他',
 };
 
-const categories = ['bicycle', 'writing', 'other'] as const;
+const categories = ['outdoor', 'writing', 'Maya','other'] as const;
 
 const allPosts = await getCollection('blog', ({ data }) => {
   return data.draft !== true;
@@ -132,11 +133,14 @@ const postsByCategory = categories.map((category) => ({
 	margin: 0;
 }
 
-.video-row.bicycle .row-header h2 {
+.video-row.outdoor .row-header h2 {
 	color: #9db8ff;
 }
 .video-row.writing .row-header h2 {
 	color: #8fe0a8;
+}
+.video-row.Maya .row-header h2 {
+	color: #b98fd9; /* サムネイルの紫系グラデーションに合わせた色 */
 }
 .video-row.other .row-header h2 {
 	color: #ffb877;
@@ -195,11 +199,14 @@ const postsByCategory = categories.map((category) => ({
 		color: rgba(255, 255, 255, 0.85);
 	}
 
-	.video-card.bicycle .thumbnail {
+	.video-card.outdoor .thumbnail {
 		background: linear-gradient(135deg, #4a5a8c, #2e3a5c);
 	}
 	.video-card.writing .thumbnail {
 		background: linear-gradient(135deg, #4a8c63, #2c4535);
+	}
+	.video-card.Maya .thumbnail {
+		background: linear-gradient(135deg, #812eb1, #311547);
 	}
 	.video-card.other .thumbnail {
 		background: linear-gradient(135deg, #b87a3e, #4a3524);

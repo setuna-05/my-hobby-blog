@@ -3,13 +3,14 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 const categoryLabels: Record<string, string> = {
-  bicycle: '自転車',
+  outdoor: 'アウトドア',
   writing: '執筆',
+  Maya: 'Maya',
   other: 'その他',
 };
 
 export async function getStaticPaths() {
-  const categories = ['bicycle', 'writing', 'other'];
+  const categories = ['outdoor', 'writing', 'Maya', 'other'];
   return categories.map((category) => ({
     params: { category },
   }));

@@ -3,8 +3,9 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
 const categoryLabels: Record<string, string> = {
-  bicycle: '自転車',
+  outdoor: 'アウトドア',
   writing: '執筆',
+  Maya: 'Maya',
   other: 'その他',
 };
 
@@ -91,7 +92,7 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
     font-family: 'M PLUS Rounded 1c', sans-serif;
   }
 
-  .category-tag.bicycle {
+  .category-tag.outdoor {
     background: #2e3a5c;
     color: #9db8ff;
   }
@@ -99,10 +100,15 @@ allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
     background: #2c4535;
     color: #8fe0a8;
   }
+  .category-tag.Maya {
+    background: #33184d;
+    color: #9900ff;
+  }
   .category-tag.other {
     background: #4a3524;
     color: #ffb877;
   }
+  
 
   .post-title {
     color: var(--color-text);
